@@ -3,6 +3,7 @@
 
 import requests
 from bs4 import BeautifulSoup
+import selenium
 import csv
 
 url = 'https://www.bever.nl/c/heren/jassen/hardshell.html'
