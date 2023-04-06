@@ -13,3 +13,13 @@ soup = BeautifulSoup(response.content, 'html.parser')
 
 product_tags = soup.find_all('div', {'class': 'as-m-product-tile'})
 
+with open('bever_products.csv', 'w', newline='') as csvfile:
+    fieldnames = ['name', 'price', 'description']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+    writer.writeheader()
+    for tag in product_tags:
+        name = tag.find('div', {'class': 'as-m-product-tile__title-wrapper'}).text.strip()
+        price = tag.find('div', {'class': 'as-a-price__value as-a-price__value--sell'}).text.strip()
+        description = tag.find('div', {'class': 'as-m-product-tile__info-wrapper'}).text.strip()
+        writer.writerow({'name': name, 'price': price, 'description': description})
