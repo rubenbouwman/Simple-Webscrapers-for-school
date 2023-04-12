@@ -18,7 +18,7 @@ product_links = []
 product_codes = []
 
 # CSV-bestand maken/openen om de productinformatie en beoordelingen op te slaan
-with open('bever_products.csv', 'w', newline='') as csvfile:
+with open('bever_product_reviews.csv', 'w', newline='') as csvfile:
     fieldnames = ['name', 'score', 'pluspunt', 'minpunt']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
@@ -37,12 +37,21 @@ for tag in product_tags:
 # loop met behulp van de product code door alle reviews van alle producten
 for product_code in product_codes:
     response = requests.get(f'https://widgets.reevoo.com/api/product_reviews?per_page=3&trkref=BEV&sku={product_code}&locale=nl-NL&display_mode=embedded&page=1')
-    if response.status_code == 200:
-        json_data = response.json()
 
-        print(json_data)
+    json_data = response.json()
+
+    name_data = json_data['header']['title']
+    name = name_data[:len(name_data)-79] + name_data[len(name_data):]
+    image = json_data['header']['product_image']
+
+    if 'reviews' in json_data["body"]:
+        for review in json_data["body"]['reviews']:
+                    score = json_data['body']['reviews'][0]['overall_score']
+                    points = json_data["body"]['reviews'][0]["text"] 
+                    print(name)
+                    print(image) 
+                    print(score) 
+                    print(points)
+
     else:
-        print('The request failed with status code', response.status_code)
-
-
-    # writer.writerow({'name': name, 'score': score, 'pluspunt': pluspunt, 'minpunt': minpunt})
+        continue
