@@ -21,7 +21,6 @@ with open('Output/Decathlon-product-reviews.csv', 'w', newline='', encoding='utf
     fieldnames = ['title', 'desc']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()
-
-    answer_body_tags = soup.find_all('div', {'class': 'answer-body svelte-1v1nczs'})
-    for answer_body in answer_body_tags:
-        print(answer_body.get_text())
+    
+    print(review_tags)
+   
