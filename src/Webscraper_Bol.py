@@ -15,14 +15,19 @@ product_pages = []
 # De links van de producten in de categorie schrapen en opslaan in de lijst
 response = requests.get(url_category, headers=headers)
 soup = BeautifulSoup(response.text, "html.parser")
-product_tags = soup.find_all('div', {'class': 'product-item_image'})
+product_tags = soup.find_all('div', {'class': 'product-item__image'})
+
 for tag in product_tags:
-    page = tag.find('a')('href')
-    product_pages.append('https://www.bol.com' + page)
+    page = tag.find('a')['href']
+    product_pages.append('https://www.bol.com/' + page)
 
 # CSV-bestand openen om de productinformatie en beoordelingen op te slaan
 with open('Output/Bol-product-reviews.csv', 'w', newline='') as csvfile:
-        fieldnames = ['product','img', 'score', 'punten']
+        fieldnames = ['product','img', 'title', 'pro', 'cons', 'body']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
+
+        for page in product_pages:
+            url = page
+            print(url)
 
