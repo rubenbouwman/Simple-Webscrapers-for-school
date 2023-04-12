@@ -8,7 +8,7 @@ import json
 from urllib.request import urlopen
 
 # De URL van de product categorie wat je wilt bezoeken
-url_category = 'https://www.bever.nl/c/heren/broeken/wandelbroeken.html'
+url_category = 'https://www.bever.nl/c/heren/schoenen/wandelschoenen.html'
 
 # Headers instellen voor de request
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
