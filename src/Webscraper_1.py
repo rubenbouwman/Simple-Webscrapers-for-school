@@ -3,7 +3,8 @@
 
 import requests
 from bs4 import BeautifulSoup
-import selenium
+from selenium import webdriver
+from selenium.webdriver.common.by import By
 import csv
 
 # Setup the url you want to visit
