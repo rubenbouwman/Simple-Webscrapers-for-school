@@ -27,23 +27,34 @@ for tag in product_tags:
     product_links.append(link)
     product_codes.append(code)
 
-# loop met behulp van de product code door alle reviews van alle producten
-for product_code in product_codes:
-    response = requests.get(f'https://widgets.reevoo.com/api/product_reviews?per_page=3&trkref=BEV&sku={product_code}&locale=nl-NL&display_mode=embedded&page=1')
 
-    json_data = response.json()
+# CSV-bestand openen om de productinformatie en beoordelingen op te slaan
+with open('Output/Bever-product-reviews.csv', 'w', newline='') as csvfile:
+        fieldnames = ['product','img', 'score', 'punten']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
 
-    name_data = json_data['header']['title']
-    name = name_data[:len(name_data)-79] + name_data[len(name_data):] # de titels komen met onrelevante html tekst en dit haalt dat weg
-    image = json_data['header']['product_image']
+        # Loop door alle reviews van alle producten om vervolgens alle aangegeven data scrapen
+        for code in product_codes:
+                url = code
+                response = requests.get(f'https://widgets.reevoo.com/api/product_reviews?per_page=3&trkref=BEV&sku={url}&locale=nl-NL&display_mode=embedded&page=1')
 
-    if 'reviews' in json_data["body"]:
-        for review in json_data["body"]['reviews']:
-                    score = json_data['body']['reviews'][0]['overall_score']
-                    points = json_data["body"]['reviews'][0]["text"] 
-                    print(name)
-                    print(image) 
-                    print(score) 
-                    print(points)
-    else:
-        continue
+
+                json_data = response.json()
+
+                name_data = json_data["header"]["title"]
+                name = name_data[:len(name_data)-79] + name_data[len(name_data):]
+                afbeelding = json_data['header']["product_image"]
+
+                if 'reviews' in json_data["body"]:
+                        vorigepunten = 'begin'
+                        for review in json_data["body"]['reviews']:
+                                score = json_data['body']['reviews'][0]['overall_score']
+                                punten = json_data["body"]['reviews'][0]["text"] 
+                                if punten != vorigepunten:
+                                        writer.writerow({'product': name, 'img': afbeelding, 'score': score, 'punten': punten})
+                                        vorigepunten = punten
+                                else:
+                                        continue
+                else:
+                        continue
