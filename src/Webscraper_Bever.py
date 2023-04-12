@@ -17,13 +17,6 @@ headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/
 product_links = []
 product_codes = []
 
-# CSV-bestand maken/openen om de productinformatie en beoordelingen op te slaan
-with open('bever_product_reviews.csv', 'w', newline='') as csvfile:
-    fieldnames = ['name', 'score', 'pluspunt', 'minpunt']
-    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-
-    writer.writeheader()
-
 # De links van de producten in de categorie schrapen en opslaan in de lijst
 response = requests.get(url_category, headers=headers)
 soup = BeautifulSoup(response.text, "html.parser")
@@ -41,7 +34,7 @@ for product_code in product_codes:
     json_data = response.json()
 
     name_data = json_data['header']['title']
-    name = name_data[:len(name_data)-79] + name_data[len(name_data):]
+    name = name_data[:len(name_data)-79] + name_data[len(name_data):] # de titels komen met onrelevante html tekst en dit haalt dat weg
     image = json_data['header']['product_image']
 
     if 'reviews' in json_data["body"]:
@@ -52,6 +45,5 @@ for product_code in product_codes:
                     print(image) 
                     print(score) 
                     print(points)
-
     else:
         continue
