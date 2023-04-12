@@ -29,19 +29,20 @@ for page in range(startingPage, endPage+1):
         product_pages.append('https://www.bol.com/' + page)
 
 # Open/make a CSV file, scrape all the important review data and then put write them in the CSV file
-with open('Output/Bol-product-reviews.csv', 'w', newline='') as csvfile:
-        fieldnames = ['product','img', 'title', 'pro', 'cons', 'body']
+with open('Output/Bol-product-reviews.csv', 'w', newline='', encoding='utf-8') as csvfile:
+        fieldnames = ['product','img', 'score', 'title', 'pros', 'cons','body']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
 
         for page in product_pages:
             url = page
-            response = requests.get(url)
+            print('visited:   ' + url)
+            response = requests.get(url, headers=headers)
             productSoup = BeautifulSoup(response.text, "html.parser")
 
             # Define the name and image of the current product the scraper is on
-            productName = productSoup.find("h1", { "class" : "page-heading" })
-            productImage = productSoup.find("tagName", { "img" : "data-zoom-image-url" })
+            productName = productSoup.find('h1', {'class': 'page-heading'}).find('span', {'data-test': 'title'}).text.strip()
+            productImage = productSoup.find('div', {'class': 'image-slot'}).find('img').get('src')
 
             review_tags = productSoup.find_all('li', {'class': 'review js-review'})
 
