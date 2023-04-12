@@ -29,5 +29,11 @@ with open('Output/Bol-product-reviews.csv', 'w', newline='') as csvfile:
 
         for page in product_pages:
             url = page
-            print(url)
+            response = requests.get(url)
+            productSoup = BeautifulSoup(response.text, "html.parser")
+
+            productName = productSoup.find("h1", { "class" : "page-heading" })
+            productImage = productSoup.find("tagName", { "img" : "data-zoom-image-url" })
+
+
 
