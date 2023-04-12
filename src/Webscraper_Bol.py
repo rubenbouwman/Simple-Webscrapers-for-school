@@ -5,19 +5,21 @@ import requests
 from bs4 import BeautifulSoup
 import csv
 
-# Header to fake the browser
-headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
-
 # Settings to change start and end page
 startingPage = 1
 endPage = 20 #change this to any page (do not exceed the websites page limit)
 
+# Header to fake the browser
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+
 # lijst maken om de links de producten op te slaan
 product_pages = []
 
-# De links van de producten in de categorie schrapen en opslaan in de lijst
+# Scrape all the product links and save them to a list
 for page in range(startingPage, endPage+1):
     url = f'https://www.bol.com/nl/nl/l/outdoorschoenen/39510/?page={page}'
+                                       # ^^^ change this part to the category you want to scrape, but leave the "?page={page}" part alone
+
     response = requests.get(url, headers=headers)
     soup = BeautifulSoup(response.text, "html.parser")
     product_tags = soup.find_all('div', {'class': 'product-item__image'})
@@ -26,7 +28,7 @@ for page in range(startingPage, endPage+1):
         page = tag.find('a')['href']
         product_pages.append('https://www.bol.com/' + page)
 
-# CSV-bestand openen om de productinformatie en beoordelingen op te slaan
+# Open/make a CSV file, scrape all the important review data and then put write them in the CSV file
 with open('Output/Bol-product-reviews.csv', 'w', newline='') as csvfile:
         fieldnames = ['product','img', 'title', 'pro', 'cons', 'body']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
@@ -37,6 +39,7 @@ with open('Output/Bol-product-reviews.csv', 'w', newline='') as csvfile:
             response = requests.get(url)
             productSoup = BeautifulSoup(response.text, "html.parser")
 
+            # Define the name and image of the current product the scraper is on
             productName = productSoup.find("h1", { "class" : "page-heading" })
             productImage = productSoup.find("tagName", { "img" : "data-zoom-image-url" })
 
