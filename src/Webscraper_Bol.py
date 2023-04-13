@@ -5,13 +5,15 @@ import requests
 from bs4 import BeautifulSoup
 import csv
 
-# Settings to change start and end page
+# -------------------- Settings --------------------
+# change start and end page
 startingPage = 1
 endPage = 20 #change this to any page (do not exceed the websites page limit)
 
 # Header to fake the browser
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
 
+# -------------------- Making the soup --------------------
 # lijst maken om de links de producten op te slaan
 product_pages = []
 
@@ -28,6 +30,7 @@ for page in range(startingPage, endPage+1):
         page = tag.find('a')['href']
         product_pages.append('https://www.bol.com/' + page)
 
+# -------------------- Scraping & Writing the CSV File --------------------
 # Open/make a CSV file, scrape all the important review data and then put write them in the CSV file
 with open('Output/Bol-product-reviews.csv', 'w', newline='', encoding='utf-8') as csvfile:
         fieldnames = ['product','img', 'score', 'title', 'pros', 'cons','body']
@@ -66,4 +69,5 @@ with open('Output/Bol-product-reviews.csv', 'w', newline='', encoding='utf-8') a
                 
                 # write everything into the CSV file
                 writer.writerow({'product': productName, 'img': productImage, 'score': score, 'title': title, 'pros': pros, 'cons': cons, 'body': body})
+# -------------------- END --------------------
 print('Done scraping!')

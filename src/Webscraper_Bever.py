@@ -7,6 +7,7 @@ import csv
 import json
 from urllib.request import urlopen
 
+# -------------------- Settings --------------------
 # De URL van de product categorie wat je wilt bezoeken
 url_category = 'https://www.bever.nl/c/heren/schoenen/wandelschoenen.html'
 
@@ -17,6 +18,7 @@ headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/
 product_links = []
 product_codes = []
 
+# -------------------- Making the soup --------------------
 # De links van de producten in de categorie schrapen en opslaan in de lijst
 response = requests.get(url_category, headers=headers)
 soup = BeautifulSoup(response.text, "html.parser")
@@ -27,7 +29,7 @@ for tag in product_tags:
     product_links.append(link)
     product_codes.append(code)
 
-
+# -------------------- Scraping & Writing the CSV File --------------------
 # CSV-bestand openen om de productinformatie en beoordelingen op te slaan
 with open('Output/Bever-product-reviews.csv', 'w', newline='') as csvfile:
         fieldnames = ['product','img', 'score', 'punten']
@@ -58,4 +60,5 @@ with open('Output/Bever-product-reviews.csv', 'w', newline='') as csvfile:
                                         continue
                 else:
                         continue
+# -------------------- END --------------------
 print('Done scraping!')
