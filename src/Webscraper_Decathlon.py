@@ -46,12 +46,13 @@ for i in product_urls:
 
 # -------------------- Scraping & Writing the CSV File --------------------
 def get_reviews():
-
+    # Make csv file
     with open('Output/Decathlon-product-reviews.csv', 'w', newline='', encoding='utf-8') as csvfile:
         fieldnames = ['Review', 'Afbeelding']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
 
+        # go through all review pages of a specific product
         page_number = 1
         while page_number <= 2:
             print(f'Getting reviews...We are at page: {page_number}')
@@ -68,7 +69,8 @@ def get_reviews():
 
                     if not reviews_data['reviews']:
                         continue
-
+                    
+                    # write the scraped contents into the csv file
                     temp_review = reviews_data['reviews'][0]['review']['body']
                     reviews.append(temp_review)
                     for i in product_afbeeldingen:
