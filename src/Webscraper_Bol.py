@@ -66,6 +66,4 @@ with open('Output/Bol-product-reviews.csv', 'w', newline='', encoding='utf-8') a
                 
                 # write everything into the CSV file
                 writer.writerow({'product': productName, 'img': productImage, 'score': score, 'title': title, 'pros': pros, 'cons': cons, 'body': body})
-
-
-
+print('Done scraping!')

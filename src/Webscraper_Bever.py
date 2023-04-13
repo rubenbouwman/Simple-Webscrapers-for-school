@@ -58,3 +58,4 @@ with open('Output/Bever-product-reviews.csv', 'w', newline='') as csvfile:
                                         continue
                 else:
                         continue
+print('Done scraping!')
